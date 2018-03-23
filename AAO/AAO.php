@@ -130,7 +130,7 @@ function AAO_consolidate() {
   }
   fclose($fh_rec_matches);
   
-  $return["rec_matches"] => array(
+  $return["rec_matches"] = array(
       "file name" => "recording-matches.csv",
       "local path" => "modules/traits-AAO/AAO/",
       "save path" => "AAO/"
@@ -144,7 +144,7 @@ function AAO_consolidate() {
   }
   fclose($fh_rec_misses);
   
-  $return["rec_matches"] => array(
+  $return["rec_matches"] = array(
       "file name" => "recording-misses.csv",
       "local path" => "modules/traits-AAO/AAO/",
       "save path" => "AAO/"
