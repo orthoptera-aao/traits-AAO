@@ -86,7 +86,7 @@ function AAO_consolidate() {
     $system["data"]["aao"][$key]["tree name"] = $tree_taxon;
     $system["data"]["aao"][$key]["tree match"] = $tree_match;
     $rec_taxa[$system["data"]["aao"][$key]["tree name"]][] = $system["data"]["aao"][$key];
-    if (!in_array($tree_taxon, $unique_taxa) {
+    if (!in_array($tree_taxon, $unique_taxa)) {
       $unique_taxa = array_merge($uique_taxa, array($tree_taxon));
     }
   }
