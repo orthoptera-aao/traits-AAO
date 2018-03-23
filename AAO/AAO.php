@@ -49,8 +49,10 @@ function AAO_prepare() {
 
 function AAO_consolidate() {
   global $system;
+  $return = array();
 
   $rec_taxa = array();
+  $unique_taxa = array();
   foreach ($system["data"]["aao"] as $key => $data) {
     if ($data["source"] == "External Repository Copies") {
       if ($data["external repository"] != "") {
@@ -84,6 +86,9 @@ function AAO_consolidate() {
     $system["data"]["aao"][$key]["tree name"] = $tree_taxon;
     $system["data"]["aao"][$key]["tree match"] = $tree_match;
     $rec_taxa[$system["data"]["aao"][$key]["tree name"]][] = $system["data"]["aao"][$key];
+    if (!in_array($tree_taxon, $unique_taxa) {
+      $unique_taxa = array_merge($uique_taxa, array($tree_taxon);
+    }
   }
   
   $rec_matches = array();
@@ -125,12 +130,25 @@ function AAO_consolidate() {
   }
   fclose($fh_rec_matches);
   
-  $return = array(
-    "rec_matches" => array(
+  $return["rec_matches"] => array(
       "file name" => "recording-matches.csv",
       "local path" => "modules/traits-AAO/AAO/",
       "save path" => "AAO/"
-    )
   );
+  
+  $fh_rec_misses = fopen("modules/traits-AAO/AAO/recording-misses.csv", "w");
+  foreach ($unique_taxa as $unique_taxon) {
+    if (!array_key_exists($unique_taxon, $rec_matches)) {
+      fputcsv($fh_rec_misses, array($unique_taxon));
+    }
+  }
+  fclose($fh_rec_misses);
+  
+  $return["rec_matches"] => array(
+      "file name" => "recording-misses.csv",
+      "local path" => "modules/traits-AAO/AAO/",
+      "save path" => "AAO/"
+  );
+  
   return($return);
 }
