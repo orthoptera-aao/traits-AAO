@@ -28,7 +28,8 @@ function AAO_prepare() {
       "unit name 2",
       "unit name 3",
       "unit name 4",
-      "rank"
+      "rank",
+      "id"
     );
     $fh_recordings = fopen("modules/traits-AAO/AAO/species_data_sources.txt", 'r');
     core_log("info", "aao", "Downloaded source metadata to modules/traits-AAO/AAO/species_data_sources.txt");
@@ -65,6 +66,10 @@ function AAO_consolidate() {
     if (!in_array($data["rank"], array("Species", "Subspecies"))) {
       continue;
     }
+    if (_get_parent_by_id($data["id"], "Order") != "Orthoptera") {
+      print "Skipping "._get_parent_by_id($data["id"], "Order");
+      continue;
+    }
     if ($data["rank"] == "Species") {
       $tree_match = "Species";
       if ($data["unit name 3"] == "") {
@@ -87,7 +92,7 @@ function AAO_consolidate() {
     $system["data"]["aao"][$key]["tree match"] = $tree_match;
     $rec_taxa[$system["data"]["aao"][$key]["tree name"]][] = $system["data"]["aao"][$key];
     if (!in_array($tree_taxon, $unique_taxa)) {
-      $unique_taxa = array_merge($uique_taxa, array($tree_taxon));
+      $unique_taxa = array_merge($unique_taxa, array($tree_taxon));
     }
   }
   
@@ -137,8 +142,10 @@ function AAO_consolidate() {
   );
   
   $fh_rec_misses = fopen("modules/traits-AAO/AAO/recording-misses.csv", "w");
+  print_r($unique_taxa);
+  print count($unique_taxa);
   foreach ($unique_taxa as $unique_taxon) {
-    if (!array_key_exists($unique_taxon, $rec_matches)) {
+    if (!array_key_exists($unique_taxon, $system["data"]["aao_tree"])) {
       fputcsv($fh_rec_misses, array($unique_taxon));
     }
   }
